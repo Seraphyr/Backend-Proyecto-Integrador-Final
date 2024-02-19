@@ -1,26 +1,36 @@
 const knex = require('../config/knexfile');
 const bcrypt = require('bcrypt')
-/* import knexConfig from '../config/knexfile'; */
-/* const { JWT_TOKEN } = require('../middlewares/authUser').default; */
+const jwt = require('jsonwebtoken')
 
-/* const saludo = (req, res) => {
-    res.send("Buenas buenas")
-} */
 
 const loginUser = async (req, res) => {
-    const { nombre, contraseña } = req.body;
-    if (!nombre || !contraseña) {
-        return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+    const nombre = req.body.username;
+    const email = req.body.email
+    let usuario = undefined
+    
+    if(!nombre){
+         usuario = await knex('usuarios').orWhere('email', '=', email).first();
+    } 
+    if (!email){
+         usuario = await knex('usuarios').where('nombre_de_usuario', '=', nombre).first();
     }
-    const usuarioEncontrado = await knex('usuarios').where('nombre_de_usuario', '=', nombre).orWhere('email', '=', nombre).first();
-    const contraseñaEncontrada = await knex('usuarios').where('contraseña', '=', contraseña).first();
-    if (!usuarioEncontrado || !contraseñaEncontrada) {
-        return res.status(401).json({ message: 'Credenciales inválidas' });
-    }
-    return res.status(200).json({ usuarioEncontrado});
 
-    /* const token = jwt.sign({ userId: usuarioEncontrado.id }, JWT_TOKEN, { expiresIn: '10m' });
-    res.status(200).json({ message: 'Usuario autenticado', token });  */
+    
+    if (!usuario) {
+        return res.status(400).json({ error: 'Usuario no encontrado' });
+    }
+
+    const validarPassword = await bcrypt.compare(req.body.password, usuario.contraseña);
+    if(!validarPassword) {
+        return res.json({error: 'Contraseña incorrecta'})
+    }
+
+    const token = jwt.sign({
+        id: usuario.id,
+        mail: usuario.mail
+    }, process.env.TOKEN_SECRET)
+
+    res.json({usuario: usuario, token: token})
 }
 
 const signUpUser = async (req,res) => {
