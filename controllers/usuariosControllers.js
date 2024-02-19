@@ -1,4 +1,5 @@
 const knex = require('../config/knexfile');
+const bcrypt = require('bcrypt')
 /* import knexConfig from '../config/knexfile'; */
 /* const { JWT_TOKEN } = require('../middlewares/authUser').default; */
 
@@ -7,7 +8,6 @@ const knex = require('../config/knexfile');
 } */
 
 const loginUser = async (req, res) => {
-
     const { nombre, contraseña } = req.body;
     if (!nombre || !contraseña) {
         return res.status(400).json({ message: 'Todos los campos son obligatorios' });
@@ -23,6 +23,23 @@ const loginUser = async (req, res) => {
     res.status(200).json({ message: 'Usuario autenticado', token });  */
 }
 
+const signUpUser = async (req,res) => {
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(req.body.password, salt);
+
+    const user = {
+        nombre_de_usuario: req.body.username,
+        email: req.body.email,
+        contraseña: password
+    }
+
+    const result = await knex('usuarios').insert(user).returning('*')
+    res.json(result)
+}
+
+
+
 module.exports = {
-    loginUser
+    loginUser,
+    signUpUser
 }
