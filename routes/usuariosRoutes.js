@@ -7,4 +7,6 @@ const usuariosControllers = require("../controllers/usuariosControllers")
 
 route.post('/login', usuariosControllers.loginUser);
 
+route.post('/signUp', usuariosControllers.signUpUser);
+
 module.exports = route;
