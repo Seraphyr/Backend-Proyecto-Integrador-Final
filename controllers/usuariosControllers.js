@@ -39,10 +39,24 @@ const loginUser = async (req, res) => {
 const signUpUser = async (req,res) => {
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(req.body.password, salt);
+    const nombre_de_usuario = req.body.username;
+    const email= req.body.email
+    const existeUsuario = await knex('usuarios').where('nombre_de_usuario', '=', nombre_de_usuario).first();
+    const existeEmail = await knex('usuarios').where('email', '=', email).first();
+
+    if (existeEmail) {
+        return res.json({mensaje: "Ya hay un usuario registrado con este mail"})
+    }
+
+    if(existeUsuario) {
+        return res.json({mensaje: "El nombre de usuario no esta disponible"})
+    } /* else{
+        res.json({mensaje: "El nombre de usuario está disponible"})
+    } */
 
     const user = {
-        nombre_de_usuario: req.body.username,
-        email: req.body.email,
+        nombre_de_usuario: nombre_de_usuario,
+        email: email,
         contraseña: password
     }
 
