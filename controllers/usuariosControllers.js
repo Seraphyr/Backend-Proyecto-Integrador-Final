@@ -4,21 +4,24 @@ const jwt = require('jsonwebtoken')
 
 
 const loginUser = async (req, res) => {
-    const nombre = req.body.username;
-    const email = req.body.email
+    /* const nombre = req.body.username;
+    const email = req.body.email */
+    const username = req.body.username;
     let usuario = undefined
     
-    if(!nombre){
-         usuario = await knex('usuarios').orWhere('email', '=', email).first();
+  /*   if(!nombre){
+         usuario = await knex('usuarios').where('email', '=', email).first();
     } 
     if (!email){
          usuario = await knex('usuarios').where('nombre_de_usuario', '=', nombre).first();
     }
-
-    
+ */
+    usuario = await knex('usuarios').where('email', '=', username).orWhere('nombre_de_usuario', '=', username).first();
     if (!usuario) {
         return res.status(400).json({ error: 'Usuario no encontrado' });
     }
+
+    
 
     const validarPassword = await bcrypt.compare(req.body.password, usuario.contraseña);
     if(!validarPassword) {
