@@ -14,7 +14,8 @@ const crearCupidoMusical = async (req, res) => {
         req.user = verified
         idUsuario = req.user.id
     }  catch (error) {
-        res.json({mensaje: error})
+        /* res.json({mensaje: error}) */
+        console.log(error)
     }
 
      /* Creo la playlist en la base de datos */
@@ -36,9 +37,7 @@ const crearCupidoMusical = async (req, res) => {
             playlist.push(cancion[f])   
         }            
     }
-    res.json(playlist)
-    
-   
+     
     /* Recorro el array playlist y cargo las canciones en la base de datos */
     for (i = 0; i<playlist.length; i++){
         let idCancion = playlist[i].id
@@ -50,6 +49,7 @@ const crearCupidoMusical = async (req, res) => {
     const result = await knex("lista").insert(listaCanciones).returning('*')
     }
 
+    res.json(playlist)
    
 }
 
