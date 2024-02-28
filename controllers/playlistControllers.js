@@ -31,7 +31,10 @@ const crearCupidoMusical = async (req, res) => {
     /* Guardo todas las canciones en el array playlist */
     for (let i=0; i<listaArtistas.length; i++){
         let numero = parseInt(listaArtistas[i])
-        let cancion = await knex('canciones').where('artista_id', "=", numero)
+        let cancion = await knex('canciones')
+        .join('artistas', 'canciones.artista_id', 'artistas.id')
+        .where('artista_id', "=", numero)
+        .select('canciones.*', 'artistas.nombre as nombre_artista');
         
         for (let f=0 ; f<cancion.length; f++){
             playlist.push(cancion[f])   
@@ -50,7 +53,7 @@ const crearCupidoMusical = async (req, res) => {
     }
 
     res.json(playlist)
-   
+    console.log(playlist);
 }
 
 
