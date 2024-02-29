@@ -58,7 +58,7 @@ const crearCupidoMusical = async (req, res) => {
 
 
 const crearMusicaContextual = async (req, res) => {
-    const listaArtistas = req.body.listaArtistas;
+    const listaGeneros = req.body.listaGeneros;
     let playlist = []
     const token = req.headers['token']
     let idUsuario 
@@ -84,8 +84,8 @@ const crearMusicaContextual = async (req, res) => {
 
    
     /* Guardo todas las canciones en el array playlist */
-    for (let i=0; i<listaArtistas.length; i++){
-        let numero = parseInt(listaArtistas[i])
+    for (let i=0; i<listaGeneros.length; i++){
+        let numero = parseInt(listaGeneros[i])
         let cancion = await knex('canciones')
         .join('artistas', 'canciones.artista_id', 'artistas.id')
         .where('genero_id', "=", numero)
@@ -108,7 +108,6 @@ const crearMusicaContextual = async (req, res) => {
     }
 
     res.json(playlist)
-    console.log(playlist);
 }
 
 module.exports = {
