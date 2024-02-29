@@ -53,7 +53,6 @@ const crearCupidoMusical = async (req, res) => {
     }
 
     res.json(playlist)
-    console.log(playlist);
 }
 
 
