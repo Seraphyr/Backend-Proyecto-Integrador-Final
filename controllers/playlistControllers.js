@@ -112,5 +112,6 @@ const crearMusicaContextual = async (req, res) => {
 }
 
 module.exports = {
-    crearCupidoMusical
+    crearCupidoMusical,
+    crearMusicaContextual
 }
