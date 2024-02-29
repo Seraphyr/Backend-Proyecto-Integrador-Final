@@ -5,7 +5,15 @@ const verArtistas = async (req, res) => {
     res.json(result)
 }
 
+const artistasRandom = async (req, res) => {
+    const result = await knex('artistas').select('*').orderByRaw('RANDOM()').limit(1)
+    res.json(result)
+}
+
+/* SELECT * FROM your_table ORDER BY RAND() LIMIT 1; */
 
 module.exports = {
-    verArtistas
+    verArtistas,
+    artistasRandom
+
 }
