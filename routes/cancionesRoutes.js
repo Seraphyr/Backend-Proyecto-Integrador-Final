@@ -4,7 +4,9 @@ const route = express.Router();
 
 const cancionesControllers = require("../controllers/cancionesControllers")
 
-route.get("/verCanciones", cancionesControllers.verCanciones)
+const verificarToken = require("../middlewares/authUser")
+
+route.get("/verCanciones", verificarToken.verificarToken, cancionesControllers.verCanciones)
 
 module.exports = route;
 
