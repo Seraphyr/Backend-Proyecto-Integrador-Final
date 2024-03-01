@@ -25,7 +25,7 @@ const loginUser = async (req, res) => {
 
     const validarPassword = await bcrypt.compare(req.body.password, usuario.contraseña);
     if(!validarPassword) {
-        return res.json({error: 'Contraseña incorrecta'})
+        return res.status(400).json({error: 'Contraseña incorrecta'})
     }
 
     const token = jwt.sign({
@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
         mail: usuario.mail
     }, process.env.TOKEN_SECRET)
 
-    res.json({usuario: usuario, token: token})
+    res.status(200).json({usuario: usuario, token: token})
 }
 
 const signUpUser = async (req,res) => {
@@ -45,11 +45,11 @@ const signUpUser = async (req,res) => {
     const existeEmail = await knex('usuarios').where('email', '=', email).first();
 
     if (existeEmail) {
-        return res.json({mensaje: "Ya hay un usuario registrado con este mail"})
+        return res.status(400).json({mensaje: "Ya hay un usuario registrado con este mail"})
     }
 
     if(existeUsuario) {
-        return res.json({mensaje: "El nombre de usuario no esta disponible"})
+        return res.status(400).json({mensaje: "El nombre de usuario no esta disponible"})
     } /* else{
         res.json({mensaje: "El nombre de usuario está disponible"})
     } */
@@ -61,7 +61,7 @@ const signUpUser = async (req,res) => {
     }
 
     const result = await knex('usuarios').insert(user).returning('*')
-    res.json(result)
+    res.status(201).json(result)
 }
 
 
