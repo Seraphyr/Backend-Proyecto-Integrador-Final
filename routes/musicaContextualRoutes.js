@@ -3,12 +3,15 @@ const route = express.Router();
 
 const musicaContextualControllers = require("../controllers/musicaContextualControllers")
 
-route.get("/verActividad", musicaContextualControllers.verActividad)
 
-route.get("/verEstadoAnimo", musicaContextualControllers.verEstadoAnimo)
+const verificarToken = require("../middlewares/authUser")
 
-route.get("/verClima", musicaContextualControllers.verClima)
+route.get("/verActividad", verificarToken.verificarToken, musicaContextualControllers.verActividad)
 
-route.get("/verGenero", musicaContextualControllers.verGenero)
+route.get("/verEstadoAnimo", verificarToken.verificarToken, musicaContextualControllers.verEstadoAnimo)
+
+route.get("/verClima", verificarToken.verificarToken, musicaContextualControllers.verClima)
+
+route.get("/verGenero", verificarToken.verificarToken, musicaContextualControllers.verGenero)
 
 module.exports = route;

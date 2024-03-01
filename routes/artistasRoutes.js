@@ -3,7 +3,9 @@ const route = express.Router();
 
 const artistasControllers = require("../controllers/artistasControllers")
 
-route.get("/verArtistas", artistasControllers.verArtistas)
-route.get("/artistasRandom", artistasControllers.artistasRandom)
+const verificarToken = require("../middlewares/authUser")
+
+route.get("/verArtistas",/* verificarToken.verificarToken  ,*/artistasControllers.verArtistas)
+route.get("/artistasRandom", verificarToken.verificarToken, artistasControllers.artistasRandom)
 
 module.exports = route;
