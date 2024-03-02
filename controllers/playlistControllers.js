@@ -53,7 +53,6 @@ const crearCupidoMusical = async (req, res) => {
     }
 
     res.status(200).json(playlist)
-    console.log(playlist);
 }
 
 
@@ -108,7 +107,6 @@ const crearMusicaContextual = async (req, res) => {
     }
 
     res.json(playlist)
-    console.log(playlist);
 }
 
 module.exports = {
