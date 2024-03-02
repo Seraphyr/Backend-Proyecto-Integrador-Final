@@ -54,9 +54,18 @@ const signUpUser = async (req,res) => {
     res.status(201).json(result)
 }
 
+const verNombre = async(req,res) => {
+    const token = req.headers['token'];
+    const verified = jwt.verify(token, process.env.TOKEN_SECRET)
+    req.user = verified
+    id = req.user.id
+    const result = await knex('usuarios').select("nombre_de_usuario").where("id", "=", id).returning('*')
+    res.json(result)
+}
 
 
 module.exports = {
     loginUser,
-    signUpUser
+    signUpUser,
+    verNombre
 }
