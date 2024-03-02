@@ -11,4 +11,6 @@ route.post('/login', usuariosControllers.loginUser);
 
 route.post('/signUp', usuariosValidators.validarSignUp, runValidation, usuariosControllers.signUpUser);
 
+route.get('/verNombre', usuariosControllers.verNombre)
+
 module.exports = route;
