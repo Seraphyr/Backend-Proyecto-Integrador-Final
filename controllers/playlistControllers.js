@@ -125,8 +125,16 @@ const verPlaylistUsuario = async (req, res) => {
     res.json(result)
 }
 
+const verDuracionPlaylist = async (req, res) =>{
+    const playlist = req.body.listaCanciones
+
+    const result = await knex("canciones").sum("duracion").whereIn("id", playlist)
+    res.json(result)
+}
+
 module.exports = {
     crearCupidoMusical,
     crearMusicaContextual,
-    verPlaylistUsuario
+    verPlaylistUsuario,
+    verDuracionPlaylist
 }
