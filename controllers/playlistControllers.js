@@ -109,7 +109,24 @@ const crearMusicaContextual = async (req, res) => {
     res.json(playlist)
 }
 
+const verPlaylistUsuario = async (req, res) => {
+    const token = req.headers['token']
+    let idUsuario 
+
+    try{
+        const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+        req.user = verified
+        idUsuario = req.user.id
+    }  catch (error) {
+        console.log(error)
+    }
+
+    const result = await knex("playlist").select("nombre").where("usuario_id", "=", idUsuario)
+    res.json(result)
+}
+
 module.exports = {
     crearCupidoMusical,
-    crearMusicaContextual
+    crearMusicaContextual,
+    verPlaylistUsuario
 }
